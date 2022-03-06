@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+  prometheus:
+    build:
+      context: ./docker/prometheus
+    restart: unless-stopped
+    ports:
+      - 9090:9090
+    expose:
+      - 9090
+    volumes:
+      - prometheus-storage:/prometheus
+    mem_limit: 2GB
+
+  grafana:
+    build:
+      context: ./docker/grafana
+    restart: unless-stopped
+    environment:
+      GF_DEFAULT_INSTANCE_NAME:
+      GF_SERVER_DOMAIN:
+      GF_SERVER_ROOT_URL:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: 'false'
+      GF_AUTH_ANONYMOUS_ENABLED:
+      GF_AUTH_ANONYMOUS_ORG_NAME:
+      GF_AUTH_GITHUB_ENABLED:
+      GF_AUTH_GITHUB_ALLOW_SIGN_UP:
+      GF_AUTH_GITHUB_CLIENT_ID:
+      GF_AUTH_GITHUB_CLIENT_SECRET:
+      GF_AUTH_GITHUB_SCOPES: user:email,read:org
+      GF_AUTH_GITHUB_AUTH_URL: https://github.com/login/oauth/authorize
+      GF_AUTH_GITHUB_TOKEN_URL: https://github.com/login/oauth/access_token
+      GF_AUTH_GITHUB_API_URL: https://api.github.com/user
+      GF_AUTH_GITHUB_ALLOWED_ORGANIZATIONS:
+      GF_ANALYTICS_REPORTING_ENABLED:
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    mem_limit: 2GB
+
+volumes:
+  prometheus-storage:
+  grafana-storage:

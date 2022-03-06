@@ -1,0 +1,6 @@
+[workspace]
+members=[
+	"listener",
+	"parser"
+]
+default-members = ["listener"]

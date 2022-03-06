@@ -1,0 +1,26 @@
+[package]
+name = "listener"
+version = "0.1.0"
+edition = "2021"
+author = "Carter Himmel"
+description = "An application listening to Twitter for Wordle games."
+license = "MIT"
+repository = "https://github.com/rslint/wordle-stats"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "4"
+egg-mode = "0.16.0"
+chrono = { version = "0.4", features = ["serde"] }
+futures = "0.3"
+parser = { path = "../parser" }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+yansi = "0.5.0"
+lazy_static = "1"
+prometheus = { version = "0.13.0", features = ["push"] }
+prometheus-static-metric = "0.5.1"
+ctrlc = "3.2.1"
+hyper = { version = "^0.14", features = ["server", "http1", "tcp"] }
+env_logger = "0.9"
+log = "0.4"
