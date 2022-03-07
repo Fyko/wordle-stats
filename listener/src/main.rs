@@ -9,7 +9,7 @@ use egg_mode::stream::StreamMessage;
 use env_logger::Env;
 use futures::TryStreamExt;
 use metrics::{GAME_COUNTER_VEC, HARD_MODE, TWEET_COUNT};
-use parser::parse;
+use parser::{GuessChar, Wordle};
 use prometheus::{Encoder, TextEncoder};
 use std::env::var;
 
@@ -48,7 +48,7 @@ async fn main() {
             if let StreamMessage::Tweet(tweet) = m {
                 TWEET_COUNT.inc();
 
-                let parsed = parse(tweet.text.as_str());
+                let parsed = Wordle::try_from(tweet.text.as_str());
                 match parsed {
                     Ok(game) => {
                         info!("Parsed score for Day {}: {}/6", game.day, game.score);
@@ -58,7 +58,7 @@ async fn main() {
                             HARD_MODE.with_label_values(&[&game.day.to_string()]).inc();
                         }
 
-                        if game.guesses[0].contains("⬛") {
+                        if game.guesses[0].contains(&GuessChar::Black) {
                             info!("User is in dark mode!");
                             DARK_MODE.with_label_values(&[&game.day.to_string()]).inc();
                         }

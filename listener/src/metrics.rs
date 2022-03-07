@@ -1,32 +1,27 @@
 use actix_web::{get, HttpResponse, Responder};
-use hyper::{
-    header::CONTENT_TYPE
-};
+use hyper::header::CONTENT_TYPE;
 use lazy_static::lazy_static;
-use prometheus::{
-    register_counter, register_counter_vec,
-    Counter, CounterVec
-};
+use prometheus::{register_counter, register_counter_vec, Counter, CounterVec};
 use prometheus::{Encoder, TextEncoder};
 
 lazy_static! {
     pub static ref TWEET_COUNT: Counter = register_counter!(
         "wordle_stats_tweet_count",
         "Total amount of tweets the service has received."
-    ).unwrap();
-
+    )
+    .unwrap();
     pub static ref HARD_MODE: CounterVec = register_counter_vec!(
         "wordle_stats_hard_mode",
         "Total amount of hard mode games parsed.",
         &["game"]
-    ).unwrap();
-
+    )
+    .unwrap();
     pub static ref DARK_MODE: CounterVec = register_counter_vec!(
         "wordle_stats_dark_mode",
         "Total amount of dark mode players.",
         &["game"]
-    ).unwrap();
-
+    )
+    .unwrap();
     pub static ref GAME_COUNTER_VEC: CounterVec = register_counter_vec!(
         "wordle_stats_games",
         "Wordle Game Statistics.",
