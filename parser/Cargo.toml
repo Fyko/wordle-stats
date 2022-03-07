@@ -9,6 +9,4 @@ repository = "https://github.com/rslint/wordle-stats"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1"
-lazy_static = "1"
-regex = "1"
+nom = "7.1"
