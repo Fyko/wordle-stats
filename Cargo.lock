@@ -1723,17 +1723,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "59547bce71d9c38b83d9c0e92b6066c4253371f15005def0c30d9657f50c7642"
 
 [[package]]
-name = "twitter"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "egg-mode",
- "tokio",
- "yansi",
-]
-
-[[package]]
 name = "typenum"
 version = "1.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
