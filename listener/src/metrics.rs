@@ -15,9 +15,16 @@ lazy_static! {
         "Total amount of tweets the service has received."
     ).unwrap();
 
-    pub static ref HARD_MODE: Counter = register_counter!(
+    pub static ref HARD_MODE: CounterVec = register_counter_vec!(
         "wordle_stats_hard_mode",
-        "Total amount of hard mode games parsed."
+        "Total amount of hard mode games parsed.",
+        &["game"]
+    ).unwrap();
+
+    pub static ref DARK_MODE: CounterVec = register_counter_vec!(
+        "wordle_stats_dark_mode",
+        "Total amount of dark mode players.",
+        &["game"]
     ).unwrap();
 
     pub static ref GAME_COUNTER_VEC: CounterVec = register_counter_vec!(

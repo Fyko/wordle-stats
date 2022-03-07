@@ -27,7 +27,7 @@ pub struct ParsedWordle<'a> {
 pub fn parse(input: &str) -> Result<ParsedWordle> {
     let inp = input.clone();
     let reg = Regex::new(
-        r"Wordle (?P<day>\d{3}) (?P<score>\d)/6(?P<hard>\*?)\n\n(?P<guesses>([🟩🟨⬜⬛\n]*){1,6})",
+        r"Wordle (?P<day>\d{3}) (?P<score>\d|X)/6(?P<hard>\*?)\n\n(?P<guesses>([🟩🟨⬜⬛\n]*){1,6})",
     )
     .unwrap();
 

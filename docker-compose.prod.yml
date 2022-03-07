@@ -6,9 +6,9 @@ services:
       context: .
     restart: unless-stopped
     expose:
-      - 8080
+      - 2489
     ports:
-      - "8080:8080"
+      - "2489:2489"
     volumes:
       - cargo-cache:/home/rust/.cargo
       - target-cache:/home/rust/src/target

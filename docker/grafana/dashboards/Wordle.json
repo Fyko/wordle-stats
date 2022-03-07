@@ -21,7 +21,7 @@
 	"editable": true,
 	"fiscalYearStartMonth": 0,
 	"graphTooltip": 0,
-	"iteration": 1646546883957,
+	"iteration": 1646590784354,
 	"links": [],
 	"liveNow": false,
 	"panels": [
@@ -73,13 +73,13 @@
 						"uid": "P1809F7CD0C75ACF3"
 					},
 					"exemplar": true,
-					"expr": "wordle_stats_games{score=\"1\", game=\"$game\"}",
+					"expr": "sum(wordle_stats_games{score=\"1\", game=\"$game\", instance=\"$instance\"})",
 					"interval": "",
 					"legendFormat": "",
 					"refId": "A"
 				}
 			],
-			"title": "1/X Scores",
+			"title": "1/6 Scores",
 			"type": "stat"
 		},
 		{
@@ -130,7 +130,7 @@
 						"uid": "P1809F7CD0C75ACF3"
 					},
 					"exemplar": true,
-					"expr": "wordle_stats_games{score=\"2\", game=\"$game\"}",
+					"expr": "sum(wordle_stats_games{score=\"2\", game=\"$game\", instance=\"$instance\"})",
 					"interval": "",
 					"legendFormat": "",
 					"refId": "A"
@@ -187,7 +187,7 @@
 						"uid": "P1809F7CD0C75ACF3"
 					},
 					"exemplar": true,
-					"expr": "wordle_stats_games{score=\"3\", game=\"$game\"}",
+					"expr": "sum(wordle_stats_games{score=\"3\", game=\"$game\", instance=\"$instance\"})",
 					"interval": "",
 					"legendFormat": "",
 					"refId": "A"
@@ -244,7 +244,7 @@
 						"uid": "P1809F7CD0C75ACF3"
 					},
 					"exemplar": true,
-					"expr": "wordle_stats_games{score=\"4\", game=\"$game\"}",
+					"expr": "sum(wordle_stats_games{score=\"4\", game=\"$game\", instance=\"$instance\"})",
 					"interval": "",
 					"legendFormat": "",
 					"refId": "A"
@@ -301,7 +301,7 @@
 						"uid": "P1809F7CD0C75ACF3"
 					},
 					"exemplar": true,
-					"expr": "wordle_stats_games{score=\"5\", game=\"$game\"}",
+					"expr": "sum(wordle_stats_games{score=\"5\", game=\"$game\", instance=\"$instance\"})",
 					"interval": "",
 					"legendFormat": "",
 					"refId": "A"
@@ -358,7 +358,7 @@
 						"uid": "P1809F7CD0C75ACF3"
 					},
 					"exemplar": true,
-					"expr": "wordle_stats_games{score=\"6\", game=\"$game\"}",
+					"expr": "sum(wordle_stats_games{score=\"6\", game=\"$game\", instance=\"$instance\"})",
 					"interval": "",
 					"legendFormat": "",
 					"refId": "A"
@@ -419,7 +419,7 @@
 						"uid": "P1809F7CD0C75ACF3"
 					},
 					"exemplar": true,
-					"expr": "wordle_stats_games{score=\"X\", game=\"$game\"}",
+					"expr": "sum(wordle_stats_games{score=\"X\", game=\"$game\", instance=\"$instance\"})",
 					"interval": "",
 					"legendFormat": "",
 					"refId": "A"
@@ -560,7 +560,7 @@
 						"uid": "P1809F7CD0C75ACF3"
 					},
 					"exemplar": true,
-					"expr": "wordle_stats_games{game=\"$game\"}",
+					"expr": "wordle_stats_games{game=\"$game\", instance=\"$instance\"}",
 					"interval": "",
 					"legendFormat": "{{score}}/6",
 					"refId": "A"
@@ -589,8 +589,8 @@
 				"overrides": []
 			},
 			"gridPos": {
-				"h": 11,
-				"w": 5,
+				"h": 10,
+				"w": 4,
 				"x": 0,
 				"y": 20
 			},
@@ -617,7 +617,7 @@
 						"uid": "P1809F7CD0C75ACF3"
 					},
 					"exemplar": true,
-					"expr": "wordle_stats_tweet_count",
+					"expr": "sum(wordle_stats_tweet_count{ instance=\"$instance\" })",
 					"interval": "",
 					"legendFormat": "",
 					"refId": "A"
@@ -678,9 +678,9 @@
 				"overrides": []
 			},
 			"gridPos": {
-				"h": 11,
-				"w": 8,
-				"x": 5,
+				"h": 10,
+				"w": 5,
+				"x": 4,
 				"y": 20
 			},
 			"id": 4,
@@ -702,7 +702,7 @@
 						"uid": "P1809F7CD0C75ACF3"
 					},
 					"exemplar": true,
-					"expr": "increase(wordle_stats_tweet_count[1m])",
+					"expr": "increase(wordle_stats_tweet_count{ instance=\"$instance\" }[1m])",
 					"interval": "",
 					"legendFormat": "{{score}}/6",
 					"refId": "A"
@@ -710,6 +710,120 @@
 			],
 			"title": "Tweets Received Per Minute",
 			"type": "timeseries"
+		},
+		{
+			"fieldConfig": {
+				"defaults": {
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							}
+						]
+					},
+					"unit": "short"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 10,
+				"w": 4,
+				"x": 9,
+				"y": 20
+			},
+			"id": 19,
+			"options": {
+				"colorMode": "value",
+				"graphMode": "area",
+				"justifyMode": "auto",
+				"orientation": "auto",
+				"reduceOptions": {
+					"calcs": [
+						"lastNotNull"
+					],
+					"fields": "",
+					"values": false
+				},
+				"textMode": "auto"
+			},
+			"pluginVersion": "8.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "prometheus",
+						"uid": "P1809F7CD0C75ACF3"
+					},
+					"exemplar": false,
+					"expr": "sum(wordle_stats_dark_mode{ game=\"$game\" })",
+					"interval": "",
+					"legendFormat": "",
+					"refId": "A"
+				}
+			],
+			"title": "Dark Mode Users",
+			"type": "stat"
+		},
+		{
+			"fieldConfig": {
+				"defaults": {
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					},
+					"unit": "short"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 10,
+				"w": 4,
+				"x": 13,
+				"y": 20
+			},
+			"id": 20,
+			"options": {
+				"colorMode": "value",
+				"graphMode": "area",
+				"justifyMode": "auto",
+				"orientation": "auto",
+				"reduceOptions": {
+					"calcs": [
+						"lastNotNull"
+					],
+					"fields": "",
+					"values": false
+				},
+				"textMode": "auto"
+			},
+			"pluginVersion": "8.4.3",
+			"targets": [
+				{
+					"datasource": {
+						"type": "prometheus",
+						"uid": "P1809F7CD0C75ACF3"
+					},
+					"exemplar": true,
+					"expr": "sum(wordle_stats_hard_mode{ game=\"$game\" })",
+					"interval": "",
+					"legendFormat": "",
+					"refId": "A"
+				}
+			],
+			"title": "Hard Mode Users",
+			"type": "stat"
 		},
 		{
 			"fieldConfig": {
@@ -759,9 +873,9 @@
 				"overrides": []
 			},
 			"gridPos": {
-				"h": 11,
-				"w": 11,
-				"x": 13,
+				"h": 10,
+				"w": 7,
+				"x": 17,
 				"y": 20
 			},
 			"id": 2,
@@ -783,7 +897,7 @@
 						"uid": "P1809F7CD0C75ACF3"
 					},
 					"exemplar": true,
-					"expr": "wordle_stats_games{game=\"$game\"}",
+					"expr": "increase(wordle_stats_games{instance=\"$instance\", game=\"$game\"}[1d])",
 					"interval": "",
 					"legendFormat": "{{score}}/6",
 					"refId": "A"
@@ -819,6 +933,28 @@
 				"regex": "",
 				"skipUrlSync": false,
 				"sort": 4,
+				"type": "query"
+			},
+			{
+				"current": {
+					"selected": true,
+					"text": "host.docker.internal:2489",
+					"value": "host.docker.internal:2489"
+				},
+				"definition": "label_values(wordle_stats_games, instance)",
+				"hide": 0,
+				"includeAll": false,
+				"multi": false,
+				"name": "instance",
+				"options": [],
+				"query": {
+					"query": "label_values(wordle_stats_games, instance)",
+					"refId": "StandardVariableQuery"
+				},
+				"refresh": 1,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 0,
 				"type": "query"
 			}
 		]

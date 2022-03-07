@@ -1,6 +1,7 @@
 [workspace]
 members=[
 	"listener",
-	"parser"
+	"parser",
+	"twitter"
 ]
 default-members = ["listener"]

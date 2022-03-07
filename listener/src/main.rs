@@ -1,19 +1,19 @@
-mod metrics;
 mod common;
+mod metrics;
 
 #[macro_use]
 extern crate log;
 
-use actix_web::{App, HttpServer, middleware::Logger};
-use env_logger::Env;
+use actix_web::{middleware::Logger, App, HttpServer};
 use egg_mode::stream::StreamMessage;
+use env_logger::Env;
 use futures::TryStreamExt;
+use metrics::{GAME_COUNTER_VEC, HARD_MODE, TWEET_COUNT};
 use parser::parse;
-use prometheus::{
-    Encoder, TextEncoder,
-};
+use prometheus::{Encoder, TextEncoder};
 use std::env::var;
-use metrics::{GAME_COUNTER_VEC, TWEET_COUNT};
+
+use crate::metrics::DARK_MODE;
 
 #[tokio::main]
 async fn main() {
@@ -31,10 +31,15 @@ async fn main() {
     };
 
     let server = HttpServer::new(|| {
-        App::new().service(metrics::serve_metrics).wrap(Logger::default())
-    }).bind(("127.0.0.1", 2489)).unwrap().run();
+        App::new()
+            .service(metrics::serve_metrics)
+            .wrap(Logger::default())
+    })
+    .bind(("0.0.0.0", 2489))
+    .unwrap()
+    .run();
     tokio::spawn(server);
-    
+
     let stream = egg_mode::stream::filter()
         .track(&["Wordle"])
         .language(&["en"])
@@ -47,11 +52,19 @@ async fn main() {
                 match parsed {
                     Ok(game) => {
                         info!("Parsed score for Day {}: {}/6", game.day, game.score);
+
+                        if game.hard {
+                            info!("Game was in hard mode");
+                            HARD_MODE.with_label_values(&[&game.day.to_string()]).inc();
+                        }
+
+                        if game.guesses[0].contains("⬛") {
+                            info!("User is in dark mode!");
+                            DARK_MODE.with_label_values(&[&game.day.to_string()]).inc();
+                        }
+
                         GAME_COUNTER_VEC
-                            .with_label_values(&[
-                                &game.day.to_string(),
-                                &game.score.to_string()
-                            ])
+                            .with_label_values(&[&game.day.to_string(), &game.score.to_string()])
                             .inc();
                     }
                     Err(_) => {}
@@ -71,7 +84,7 @@ async fn main() {
         std::process::exit(0);
     })
     .expect("Error setting Ctrl-C handler");
-    
+
     if let Err(e) = stream.await {
         println!("Stream error: {}", e);
         println!("Disconnected")

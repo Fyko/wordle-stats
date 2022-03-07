@@ -2,7 +2,6 @@
 name = "listener"
 version = "0.1.0"
 edition = "2021"
-author = "Carter Himmel"
 description = "An application listening to Twitter for Wordle games."
 license = "MIT"
 repository = "https://github.com/rslint/wordle-stats"
