@@ -11,7 +11,6 @@ services:
       - 9090
     volumes:
       - prometheus-storage:/prometheus
-    mem_limit: 2GB
 
   grafana:
     build:
@@ -40,7 +39,6 @@ services:
       - 3000:3000
     volumes:
       - grafana-storage:/var/lib/grafana
-    mem_limit: 2GB
 
 volumes:
   prometheus-storage:
