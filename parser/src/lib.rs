@@ -2,12 +2,12 @@
 
 use nom::{
     branch::alt,
-    bytes::complete::tag,
-    character::complete::{char, multispace1, newline, space1, u16, u8},
-    combinator::{map, opt},
+    bytes::complete::{tag, take_until},
+    character::complete::{char, line_ending, multispace1, not_line_ending, space1, u16, u8},
+    combinator::{map, opt, value},
     error::Error,
     multi::{many_m_n, separated_list1},
-    sequence::{preceded, separated_pair, terminated, tuple},
+    sequence::{pair, preceded, separated_pair, terminated, tuple},
     Err, IResult,
 };
 
@@ -71,10 +71,10 @@ fn parse_score_hard(input: &str) -> IResult<&str, (u8, bool)> {
 /// Ex: 🟩 -> GuessChar::Green
 fn parse_guess_char(input: &str) -> IResult<&str, GuessChar> {
     alt((
-        map(char('🟩'), |_| GuessChar::Green),
-        map(char('🟨'), |_| GuessChar::Yellow),
-        map(char('⬜'), |_| GuessChar::White),
-        map(char('⬛'), |_| GuessChar::Black),
+        value(GuessChar::Green, char('🟩')),
+        value(GuessChar::Yellow, char('🟨')),
+        value(GuessChar::White, char('⬜')),
+        value(GuessChar::Black, char('⬛')),
     ))(input)
 }
 
@@ -82,10 +82,13 @@ fn parse_guess_char(input: &str) -> IResult<&str, GuessChar> {
 ///
 /// Ex: 🟩🟩🟩🟩🟩 -> [🟩🟩🟩🟩🟩]
 fn parse_guess_line(input: &str) -> IResult<&str, GuessLine> {
-    map(many_m_n(5, 5, parse_guess_char), |chars| unsafe {
-        // SAFETY: guaranteed to have only 5 characters from parser, meaning this always succeeds
-        chars.try_into().unwrap_unchecked()
-    })(input)
+    terminated(
+        map(
+            many_m_n(WORD_LENGTH, WORD_LENGTH, parse_guess_char),
+            |chars| chars.try_into().unwrap(),
+        ),
+        not_line_ending,
+    )(input)
 }
 
 /// Parse an entire matrix of guesses
@@ -99,7 +102,7 @@ fn parse_guess_line(input: &str) -> IResult<&str, GuessLine> {
 /// ]
 /// ```
 fn parse_guesses(input: &str) -> IResult<&str, Guesses> {
-    separated_list1(newline, parse_guess_line)(input)
+    separated_list1(line_ending, parse_guess_line)(input)
 }
 
 /// Parse full wordle content
@@ -127,7 +130,7 @@ fn parse_data(input: &str) -> IResult<&str, Wordle> {
 /// println!("{:#?}", resp);
 /// ```
 pub fn parse(input: &str) -> IResult<&str, Wordle> {
-    preceded(tag("Wordle "), parse_data)(input)
+    preceded(pair(take_until("Wordle "), tag("Wordle ")), parse_data)(input)
 }
 
 #[cfg(test)]
