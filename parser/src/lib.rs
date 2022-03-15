@@ -135,52 +135,147 @@ pub fn parse(input: &str) -> IResult<&str, Wordle> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{GuessChar, Wordle};
+	use crate::{GuessChar, Wordle};
 
-    #[test]
-    fn test_parse() {
-        let parsed =
-            Wordle::try_from("Wordle 258 4/6*\n\n⬜⬜🟨⬜🟨\n⬜🟨⬜🟨⬜\n🟩⬜🟩⬜⬜\n🟩🟩🟩🟩🟩")
+	#[test]
+	fn game_only_parse() {
+		let parsed =
+			Wordle::try_from("Wordle 258 4/6*\n\n⬜⬜🟨⬜🟨\n⬜🟨⬜🟨⬜\n🟩⬜🟩⬜⬜\n🟩🟩🟩🟩🟩")
+				.unwrap();
+		println!("{:#?}", parsed);
+
+		assert_eq!(
+			parsed,
+			Wordle {
+				day: 258,
+				score: 4,
+				hard: true,
+				guesses: vec![
+					[
+						GuessChar::White,
+						GuessChar::White,
+						GuessChar::Yellow,
+						GuessChar::White,
+						GuessChar::Yellow
+					],
+					[
+						GuessChar::White,
+						GuessChar::Yellow,
+						GuessChar::White,
+						GuessChar::Yellow,
+						GuessChar::White
+					],
+					[
+						GuessChar::Green,
+						GuessChar::White,
+						GuessChar::Green,
+						GuessChar::White,
+						GuessChar::White
+					],
+					[
+						GuessChar::Green,
+						GuessChar::Green,
+						GuessChar::Green,
+						GuessChar::Green,
+						GuessChar::Green
+					]
+				],
+			}
+		);
+	}
+
+	#[test]
+	fn game_with_comment() {
+		let parsed = Wordle::try_from(
+			"Wow this was hard!\nWordle 258 4/6*\n\n⬜⬜🟨⬜🟨\n⬜🟨⬜🟨⬜\n🟩⬜🟩⬜⬜\n🟩🟩🟩🟩🟩",
+		)
+		.unwrap();
+		println!("{:#?}", parsed);
+
+		assert_eq!(
+			parsed,
+			Wordle {
+				day: 258,
+				score: 4,
+				hard: true,
+				guesses: vec![
+					[
+						GuessChar::White,
+						GuessChar::White,
+						GuessChar::Yellow,
+						GuessChar::White,
+						GuessChar::Yellow
+					],
+					[
+						GuessChar::White,
+						GuessChar::Yellow,
+						GuessChar::White,
+						GuessChar::Yellow,
+						GuessChar::White
+					],
+					[
+						GuessChar::Green,
+						GuessChar::White,
+						GuessChar::Green,
+						GuessChar::White,
+						GuessChar::White
+					],
+					[
+						GuessChar::Green,
+						GuessChar::Green,
+						GuessChar::Green,
+						GuessChar::Green,
+						GuessChar::Green
+					]
+				],
+			}
+		);
+	}
+
+	#[test]
+	fn game_with_annotation() {
+		let parsed =
+            Wordle::try_from("Wordle 258 4/6*\n\n⬜⬜🟨⬜🟨 ||foo||\n⬜🟨⬜🟨⬜ ||bar||\n🟩⬜🟩⬜⬜ ||baz||\n🟩🟩🟩🟩🟩")
                 .unwrap();
-        println!("{:#?}", parsed);
+		println!("{:#?}", parsed);
 
-        assert_eq!(
-            parsed,
-            Wordle {
-                day: 258,
-                score: 4,
-                hard: true,
-                guesses: vec![
-                    [
-                        GuessChar::White,
-                        GuessChar::White,
-                        GuessChar::Yellow,
-                        GuessChar::White,
-                        GuessChar::Yellow
-                    ],
-                    [
-                        GuessChar::White,
-                        GuessChar::Yellow,
-                        GuessChar::White,
-                        GuessChar::Yellow,
-                        GuessChar::White
-                    ],
-                    [
-                        GuessChar::Green,
-                        GuessChar::White,
-                        GuessChar::Green,
-                        GuessChar::White,
-                        GuessChar::White
-                    ],
-                    [
-                        GuessChar::Green,
-                        GuessChar::Green,
-                        GuessChar::Green,
-                        GuessChar::Green,
-                        GuessChar::Green
-                    ]
-                ],
-            }
-        );
-    }
+		assert_eq!(
+			parsed,
+			Wordle {
+				day: 258,
+				score: 4,
+				hard: true,
+				guesses: vec![
+					[
+						GuessChar::White,
+						GuessChar::White,
+						GuessChar::Yellow,
+						GuessChar::White,
+						GuessChar::Yellow
+					],
+					[
+						GuessChar::White,
+						GuessChar::Yellow,
+						GuessChar::White,
+						GuessChar::Yellow,
+						GuessChar::White
+					],
+					[
+						GuessChar::Green,
+						GuessChar::White,
+						GuessChar::Green,
+						GuessChar::White,
+						GuessChar::White
+					],
+					[
+						GuessChar::Green,
+						GuessChar::Green,
+						GuessChar::Green,
+						GuessChar::Green,
+						GuessChar::Green
+					]
+				],
+			}
+		);
+	}
 }
