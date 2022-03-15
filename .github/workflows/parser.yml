@@ -1,4 +1,4 @@
-name: Rust
+name: Parser
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build
-      run: cargo build --verbose
+      run: cargo build -p parser --verbose
 
-    - name: Test Parser
+    - name: Test
       run: cargo test -p parser
