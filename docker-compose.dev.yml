@@ -26,8 +26,18 @@ services:
       GF_AUTH_GITHUB_API_URL: https://api.github.com/user
       GF_AUTH_GITHUB_ALLOWED_ORGANIZATIONS:
       GF_ANALYTICS_REPORTING_ENABLED:
+      GF_RENDERING_SERVER_URL: http://localhost:8081/render
+      GF_RENDERING_CALLBACK_URL: http://grafana:3000/
+      GF_LOG_FILTERS: rendering:debug
     volumes:
       - grafana-storage:/var/lib/grafana
+
+  renderer:
+    image: grafana/grafana-image-renderer:latest
+    expose:
+      - 8081
+    ports:
+      - 8081:8081
 
 volumes:
   prometheus-storage:

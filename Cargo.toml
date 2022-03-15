@@ -1,6 +1,7 @@
 [workspace]
 members=[
 	"listener",
-	"parser"
+	"parser",
+	"cron"
 ]
 default-members = ["listener"]
