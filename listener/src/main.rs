@@ -52,19 +52,20 @@ async fn main() {
 				match parsed {
 					Ok(game) => {
 						info!("Parsed score for Day {}: {}/6", game.day, game.score);
+						let day = game.day.to_string();
 
 						if game.hard {
 							info!("Game was in hard mode");
-							HARD_MODE.with_label_values(&[&game.day.to_string()]).inc();
+							HARD_MODE.with_label_values(&[&day]).inc();
 						}
 
 						if game.guesses[0].contains(&GuessChar::Black) {
 							info!("User is in dark mode!");
-							DARK_MODE.with_label_values(&[&game.day.to_string()]).inc();
+							DARK_MODE.with_label_values(&[&day]).inc();
 						}
 
 						GAME_COUNTER_VEC
-							.with_label_values(&[&game.day.to_string(), &game.score.to_string()])
+							.with_label_values(&[&day, &game.score.to_string()])
 							.inc();
 					}
 					Err(_) => {}
